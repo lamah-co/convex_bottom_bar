@@ -28,13 +28,19 @@ class FixedCircleTabStyle extends InnerBuilder {
   /// Index of the centered convex shape.
   final int convexIndex;
 
+  /// Fixed color for the centered convex item
+  final Color fixedColor;
+
+  
+
   /// Create style builder
   FixedCircleTabStyle(
       {required List<TabItem> items,
       required Color activeColor,
       required Color color,
       required this.backgroundColor,
-      required this.convexIndex})
+      required this.convexIndex,
+      required this.fixedColor})
       : super(items: items, activeColor: activeColor, color: color);
 
   @override
@@ -53,9 +59,9 @@ class FixedCircleTabStyle extends InnerBuilder {
         height: style.layoutSize,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: c,
+          color: fixedColor,
         ),
-        margin: EdgeInsets.all(margin),
+       margin: EdgeInsets.all(margin), 
         child: BlendImageIcon(
           active ? item.activeIcon ?? item.icon : item.icon,
           size: style.activeIconSize,
@@ -72,7 +78,7 @@ class FixedCircleTabStyle extends InnerBuilder {
     );
     var children = noLabel
         ? <Widget>[icon]
-        : <Widget>[icon, Text(item.title ?? '', style: textStyle)];
+        : <Widget>[icon, SizedBox(height: 5.0), Text(item.title ?? '', style: textStyle)];
     return Container(
       padding: EdgeInsets.only(bottom: 2),
       child: Column(

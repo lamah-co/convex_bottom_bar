@@ -42,10 +42,10 @@ class ConvexNotchedRectangle extends NotchedShape {
 
     // The guest's shape is a circle bounded by the guest rectangle.
     // So the guest's radius is half the guest width.
-    final notchRadius = guest.width / 2.0;
+    final notchRadius = guest.width / 1.65;
 
-    const s1 = 15.0;
-    const s2 = 1.0;
+    const s1 = 10.0;
+    const s2 = 0.0;
 
     final r = notchRadius;
     final a = -1.0 * r - s2;

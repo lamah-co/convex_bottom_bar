@@ -39,7 +39,7 @@ class TabItem<T> {
   /// Create item
   const TabItem({
     this.fontFamily,
-    this.title = '',
+    this.title = 'Test',
     required this.icon,
     this.activeIcon,
     bool? isIconBlend,

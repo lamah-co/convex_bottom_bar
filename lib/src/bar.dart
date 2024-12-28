@@ -212,7 +212,7 @@ class ConvexAppBar extends StatefulWidget {
   }) : this.builder(
           key: key,
           itemBuilder: supportedStyle(
-            style ?? TabStyle.reactCircle,
+            style ?? TabStyle.fixedCircle,
             items: items,
             color: color ?? Colors.white60,
             activeColor: activeColor ?? Colors.white,
@@ -609,7 +609,7 @@ class ConvexAppBarState extends State<ConvexAppBar>
 
     return Container(
       height: height,
-      padding: EdgeInsets.only(bottom: paddingBottom),
+     padding: EdgeInsets.only(bottom: 10.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
