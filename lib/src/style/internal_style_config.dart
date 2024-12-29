@@ -28,7 +28,7 @@ class InternalStyle extends StyleHook {
 
   @override
   double get activeIconMargin {
-    return (ACTION_LAYOUT_SIZE - ACTION_INNER_BUTTON_SIZE) / 4;
+    return (ACTION_LAYOUT_SIZE - ACTION_INNER_BUTTON_SIZE) / 20;
   }
 
   @override
