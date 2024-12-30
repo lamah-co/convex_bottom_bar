@@ -212,7 +212,7 @@ class ConvexAppBar extends StatefulWidget {
   }) : this.builder(
           key: key,
           itemBuilder: supportedStyle(
-            style ?? TabStyle.reactCircle,
+            style ?? TabStyle.fixedCircle,
             items: items,
             color: color ?? Colors.white60,
             activeColor: activeColor ?? Colors.white,
@@ -529,63 +529,71 @@ class ConvexAppBarState extends State<ConvexAppBar>
   }
 
   @override
-  Widget build(BuildContext context) {
-    // take care of iPhoneX' safe area at bottom edge
-    final additionalBottomPadding =
-        math.max(MediaQuery.of(context).padding.bottom, 0.0);
-    final convexIndex = isFixed() ? (widget.count ~/ 2) : _currentIndex;
-    final active = isFixed() ? convexIndex == _currentIndex : true;
+ Widget build(BuildContext context) {
+  final screenHeight = MediaQuery.of(context).size.height;
+  final barHeight = screenHeight <= 680 ? 70 : BAR_HEIGHT;
+  final double top = screenHeight <= 680 ? -45 : CURVE_TOP;
+  
+  final additionalBottomPadding =
+      math.max(MediaQuery.of(context).padding.bottom, 0.0);
 
-    final height = (widget.height ?? BAR_HEIGHT) + additionalBottomPadding;
-    final width = MediaQuery.of(context).size.width;
-    var percent = isFixed()
-        ? const AlwaysStoppedAnimation<double>(0.5)
-        : _animation ?? _updateAnimation();
-    var factor = 1 / widget.count;
-    var textDirection = Directionality.of(context);
-    var dx = convexIndex! / (widget.count - 1);
-    if (textDirection == TextDirection.rtl) {
-      dx = 1 - dx;
-    }
+  
+  final convexIndex = isFixed() ? (widget.count ~/ 2) : _currentIndex;
+  final active = isFixed() ? convexIndex == _currentIndex : true;
 
-    var offset = FractionalOffset(widget.count > 1 ? dx : 0.0, 0);
-    return extend.Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.bottomCenter,
-      children: <Widget>[
-        Container(
-          height: height,
-          width: width,
-          child: CustomPaint(
-            painter: ConvexPainter(
-              top: widget.top ?? CURVE_TOP,
-              width: widget.curveSize ?? CONVEX_SIZE,
-              height: widget.curveSize ?? CONVEX_SIZE,
-              color: widget.backgroundColor ?? Colors.blue,
-              shadowColor: widget.shadowColor ?? Colors.black38,
-              gradient: widget.gradient,
-              sigma: widget.elevation ?? ELEVATION,
-              leftPercent: percent,
-              textDirection: textDirection,
-              cornerRadius: widget.cornerRadius,
-            ),
+
+  final height = (widget.height ?? barHeight) + additionalBottomPadding;
+  final width = MediaQuery.of(context).size.width;
+  
+
+  var percent = isFixed()
+      ? const AlwaysStoppedAnimation<double>(0.5)
+      : _animation ?? _updateAnimation();
+  var factor = 1 / widget.count;
+  var textDirection = Directionality.of(context);
+  var dx = convexIndex! / (widget.count - 1);
+  if (textDirection == TextDirection.rtl) {
+    dx = 1 - dx;
+  }
+
+  var offset = FractionalOffset(widget.count > 1 ? dx : 0.0, 0);
+  return extend.Stack(
+    clipBehavior: Clip.none,
+    alignment: Alignment.bottomCenter,
+    children: <Widget>[
+      Container(
+        height: height,
+        width: width,
+        child: CustomPaint(
+          painter: ConvexPainter(
+            top: widget.top ?? CURVE_TOP,
+            width: widget.curveSize ?? CONVEX_SIZE,
+            height: widget.curveSize ?? CONVEX_SIZE,
+            color: widget.backgroundColor ?? Colors.blue,
+            shadowColor: widget.shadowColor ?? Colors.black38,
+            gradient: widget.gradient,
+            sigma: widget.elevation ?? ELEVATION,
+            leftPercent: percent,
+            textDirection: textDirection,
+            cornerRadius: widget.cornerRadius,
           ),
         ),
-        _barContent(height, additionalBottomPadding, convexIndex),
-        Positioned.fill(
-          top: widget.top ?? CURVE_TOP,
-          bottom: additionalBottomPadding,
-          child: FractionallySizedBox(
-              widthFactor: factor,
-              alignment: offset,
-              child: GestureDetector(
-                onTap: () => _onTabClick(convexIndex),
-                child: _newTab(convexIndex, active),
-              )),
-        ),
-      ],
-    );
-  }
+      ),
+      _barContent(height, additionalBottomPadding, convexIndex),
+      Positioned.fill(
+        top: widget.top ?? top,
+        bottom: additionalBottomPadding,
+        child: FractionallySizedBox(
+          widthFactor: factor,
+          alignment: offset,
+          child: GestureDetector(
+            onTap: () => _onTabClick(convexIndex),
+            child: _newTab(convexIndex, active),
+          )),
+      ),
+    ],
+  );
+}
 
   /// Whether the tab shape are fixed or not.
   bool isFixed() => widget.itemBuilder.fixed();
@@ -609,7 +617,7 @@ class ConvexAppBarState extends State<ConvexAppBar>
 
     return Container(
       height: height,
-      padding: EdgeInsets.only(bottom: paddingBottom),
+     padding: EdgeInsets.only(bottom: 10.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,

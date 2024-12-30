@@ -58,7 +58,7 @@ DelegateBuilder supportedStyle(
         color: color,
         activeColor: activeColor,
         backgroundColor: backgroundColor,
-        convexIndex: items.length ~/ 2,
+        convexIndex: items.length ~/ 2, fixedColor: Color(0xFFED1C24),
       );
       break;
     case TabStyle.react:

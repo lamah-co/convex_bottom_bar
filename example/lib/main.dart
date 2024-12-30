@@ -17,11 +17,18 @@
 import 'package:convex_app_bar_example/convex_button_demo.dart';
 import 'package:convex_app_bar_example/custom_appbar_sample.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'default_appbar_demo.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+  DevicePreview(
+    enabled: !kReleaseMode,
+    builder: (context) => MyApp(), // Wrap your app
+  ),
+);
 
 class MyApp extends StatefulWidget {
   @override
@@ -32,6 +39,9 @@ class _State extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       initialRoute: "/",
       routes: {
         "/": (_) => HelloConvexAppBar(),
@@ -54,13 +64,15 @@ class HelloConvexAppBar extends StatelessWidget {
         onPressed: () => Navigator.of(context).pushNamed('/bar'),
       )),
       bottomNavigationBar: ConvexAppBar(
-        style: TabStyle.react,
+        style: TabStyle.fixedCircle,
         items: [
-          TabItem(icon: Icons.list),
+          TabItem(icon: Icons.list, title: 'Home'),
+          TabItem(icon: Icons.assessment),
           TabItem(icon: Icons.calendar_today),
           TabItem(icon: Icons.assessment),
+          TabItem(icon: Icons.list),
         ],
-        initialActiveIndex: 1,
+        initialActiveIndex: 0,
         onTap: (int i) => print('click index=$i'),
       ),
     );
